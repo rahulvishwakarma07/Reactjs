@@ -1,0 +1,107 @@
+import student from './studentRecord'
+import { Component } from 'react'
+class Student extends Component {
+  constructor() {
+    super();
+    this.state = {
+      studentlist: student,
+      defaultbranch: 'all'
+    }
+  }
+
+  addstudentrecord = () => {
+    let newstudent = { rollno: this.rollno.value, name: this.name.value, branch: this.branch.value, mob: this.mob.value }
+    this.setState({ studentlist: [...this.state.studentlist, newstudent] });
+    // window.alert("called");
+
+  }
+
+  deleterecord=(rollno)=>{
+    let index = this.state.studentlist.findIndex((student)=>student.rollno == rollno);
+    this.state.studentlist.splice(index,1);
+    this.setState({studentList: [...this.state.studentlist]});
+    // window.alert(index)
+  }
+
+  render() {
+    return <>
+
+      <div className='container-fluid bg-danger p-3'>
+        <h4 className='text-center text-white'>Student App</h4>
+      </div>
+
+      <div className='container'>
+        <div className='row mt-5'>
+          <div className='col-md-6'>
+            <input ref={(rollno) => this.rollno = rollno} className='form-control' placeholder='Enter roll no. ' />
+          </div>
+          <div className='col-md-6'>
+            <input ref={(name) => this.name = name} className='form-control' placeholder='Enter Name ' />
+          </div>
+        </div>
+        <div className='row mt-5'>
+          <div className='col-md-6'>
+            <select ref={(branch) => this.branch = branch} className='form-control'>
+              <option>Select branch</option>
+              <option value={'IT'}>IT</option>
+              <option value={'CS'}>CS</option>
+              <option value={'MECH'}>MECH</option>
+              <option value={'EC'}>EC</option>
+            </select>
+          </div>
+          <div className='col-md-6'>
+            <input ref={(mob) => this.mob = mob} className='form-control' placeholder='Enter Mobile no. ' />
+          </div>
+        </div>
+
+        <div className='row mt-4'>
+          <div className='col-md-6'>
+            <button className='btn btn-primary' onClick={this.addstudentrecord}>ADD</button>
+          </div>
+
+          <div className='col-md-6'>
+            <button onClick={() => this.setState({ defaultbranch: "CS" })} className="btn btn-primary ms-2">CS : ({this.state.studentlist.filter((student) => student.branch == "CS").length})</button>
+
+            <button onClick={() => this.setState({ defaultbranch: "IT" })} className="btn btn-danger ms-2">IT : ({this.state.studentlist.filter((student) => student.branch == "IT").length})</button>
+
+            <button onClick={() => this.setState({ defaultbranch: "EC" })} className="btn btn-info ms-2">EC : ({this.state.studentlist.filter((student) => student.branch == "EC").length})</button>
+
+            <button onClick={() => this.setState({ defaultbranch: "MECH" })} className="btn btn-warning ms-2">MECH : ({this.state.studentlist.filter((student) => student.branch == "MECH").length})</button>
+
+            <button onClick={() => this.setState({ defaultbranch: "all" })} className="btn btn-outline-success ms-2">Total : ({this.state.studentlist.length})</button>
+          </div>
+        </div>
+
+
+        <div className='container mt-4'>
+          <table className='table border'>
+            <thead className='border'>
+              <tr>
+                <th>S.No</th>
+                <th>Roll No.</th>
+                <th>Name</th>
+                <th>Branch</th>
+                <th>Mobile</th>
+                <th>Delete</th>
+              </tr>
+            </thead>
+            <tbody className='border'>
+              {this.state.studentlist.map((data, index) => <tr key={index} >
+
+                <td>{index + 1}</td>
+                <td>{data.rollno}</td>
+                <td>{data.name}</td>
+                <td>{data.branch}</td>
+                <td>{data.mob}</td>
+                <td><button className='btn btn-outline-danger' onClick={()=>this.deleterecord(data.rollno)}>Delete</button></td>
+              </tr>)}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </>
+  }
+}
+
+export default Student
